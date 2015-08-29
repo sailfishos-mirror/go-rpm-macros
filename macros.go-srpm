@@ -20,9 +20,9 @@
 %gccgo_min_vers  5.0.0
 
 # Define commands for building
-%golang_build    go build -compiler gc
-%gcc_go_build    go build -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS"
+%golang_build    go build -compiler gc    -ldflags "${LDFLAGS:-}"
+%gcc_go_build    go build -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-}"
 
 # Define commands for testing
-%golang_test     go test -compiler gc
-%gcc_go_test     go test -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS"
+%golang_test     go test -compiler gc    -ldflags "${LDFLAGS:-}"
+%gcc_go_test     go test -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-}"
