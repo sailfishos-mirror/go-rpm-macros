@@ -15,5 +15,3 @@
 %gotest() go test -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-}"
  %{?**};
 
-# Enable use of compiler(...) virtual provide
-%go_compiler 1

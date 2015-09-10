@@ -12,5 +12,3 @@
 # Define commands for testing
 %gotest() go test -compiler gc -ldflags "${LDFLAGS:-}" %{?**};
 
-# Enable use of compiler(...) virtual provide
-%go_compiler 1
