@@ -12,6 +12,5 @@
 %gobuild(o:) go build -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-}" -a -v -x %{?**};
 
 # Define commands for testing
-%gotest() go test -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-}"
- %{?**};
+%gotest() go test -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-}" %{?**};
 
