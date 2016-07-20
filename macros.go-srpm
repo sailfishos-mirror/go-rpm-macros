@@ -9,8 +9,8 @@
 # This file provides only macros and must not use any other package.
 
 # Define arches for PA and SA
-%golang_arches   %{ix86} x86_64 %{arm} aarch64 %{power64}
-%gccgo_arches    s390x %{mips}
+%golang_arches   %{ix86} x86_64 %{arm} aarch64 %{power64} s390x
+%gccgo_arches    %{mips}
 %go_arches       %{golang_arches} %{gccgo_arches}
 
 # Where to set GOPATH for builds
