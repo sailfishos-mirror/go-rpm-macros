@@ -7,7 +7,7 @@
 
 # Define commands for building
 # BUILD_ID can be generated for golang build no matter of debuginfo
-%gobuild(o:) go build -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n')" -a -v -x %{?**};
+%gobuild(o:) go build -buildmode pie -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '%__global_ldflags'" -a -v -x %{?**};
 
 # Define commands for testing
 %gotest() go test -compiler gc -ldflags "${LDFLAGS:-}" %{?**};
