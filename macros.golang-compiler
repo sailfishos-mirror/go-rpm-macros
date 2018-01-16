@@ -15,5 +15,5 @@ go build -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(hea
 %endif \
 
 # Define commands for testing
-%gotest() go test -compiler gc -ldflags "${LDFLAGS:-} -extldflags '%__global_ldflags %{?__golang_extldflags}'" %{?**};
+%gotest() go test -buildmode pie -compiler gc -ldflags "${LDFLAGS:-} -extldflags '%__global_ldflags %{?__golang_extldflags}'" %{?**};
 
