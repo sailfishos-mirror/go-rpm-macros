@@ -1,0 +1,8 @@
+The go-rpm-macros project provides files needed to automate Go (Golang) rpm
+packaging:
+ – default filesystem locations,
+ – architecture-specific settings,
+ – dependency automation (Provides, Requires, BuildRequires),
+ – macros to simplify and standardize Go spec files, for all rpm build stages,
+   including the srpm stage,
+ – documented templates to showcase how to use the result.
