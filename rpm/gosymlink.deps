@@ -193,7 +193,8 @@ processlink() {
     [[ -e "${lockdir}/.goipath" ]] && readmetadata "${lockdir}/.goipath"
     case ${action} in
       provides) provides "${link#${prefix}${gopath}/src/}" ;;
-      requires) requires "${lockdir}" ;;
+      requires) echo "go-filesystem"
+                requires "${lockdir}" ;;
     esac
   fi
 }

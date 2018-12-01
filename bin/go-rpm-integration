@@ -472,5 +472,6 @@ case $action in
                     goipath="${dir#${prefix}${gopath}/src/}"
                     readmetadata "${lockfile}"
                     requires "${goipath}"
+                    echo "go-filesystem"
                   done ;;
 esac
