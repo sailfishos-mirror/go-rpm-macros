@@ -155,11 +155,10 @@ local function altenv(suffix, rpmname, goaltipaths, verbose)
   local     go = require "fedora.srpm.go"
   local ismain = (suffix == "") or (suffix == "0")
   if ismain then
-    fedora.zalias(  {"goipath", "gocid", "gocanonipath",
-                     "goaltcid", "goaltdescription", "goaltsummary", "goaltheader"},                          verbose)
+    fedora.zalias(  {"goipath", "gocanonipath",
+                     "goaltdescription", "goaltsummary", "goaltheader"},                                      verbose)
   end
   fedora.safeset("gocanonipath"     .. suffix,    "%{goipath" .. suffix .. "}",                               verbose)
-  fedora.safeset("goaltcid"         .. suffix,    "%{?gocid"  .. suffix .. "}",                               verbose)
   fedora.safeset("goaltsummary"     .. suffix,    "%{summary}",                                               verbose)
   fedora.safeset("goaltdescription" .. suffix,    "%{?common_description}",                                   verbose)
   fedora.setcurrent( {"gocanonipath", "goaltcid", "goaltsummary"}, suffix,                                    verbose)
@@ -181,7 +180,7 @@ local function altenv(suffix, rpmname, goaltipaths, verbose)
   fedora.explicitset("currentgoaltname",        rpmname .. "-devel",                                          verbose)
   fedora.explicitset("currentgoaltfilelist",    rpmname .. "-%{gofilelist}",                                  verbose)
   if ismain then
-    fedora.zalias(  {"gocanonipath", "goaltcid", "goaltsummary", "goaltdescription"},                         verbose)
+    fedora.zalias(  {"gocanonipath", "goaltsummary", "goaltdescription"},                                     verbose)
   end
 end
 
@@ -194,10 +193,14 @@ local function singlepkg(kind, suffix, verbose)
     local fedora = require "fedora.common"
     local ismain = (suffix == "") or (suffix == "0")
     if ismain then
-      fedora.zalias({"goaltipaths"}, verbose)
+      fedora.zalias({"goaltipaths","gocid","goaltcid"},                verbose)
     end
-    for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths"  .. suffix .. "}",
-                                                      "%{?goaltcid"    .. suffix .. "}")) do
+    fedora.safeset("goaltcid" .. suffix, "%{?gocid"  .. suffix .. "}", verbose)
+    if ismain then
+      fedora.zalias({"goaltcid"},                                      verbose)
+    end
+    for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths" .. suffix .. "}",
+                                                      "%{goaltcid"    .. suffix .. "}")) do
       altenv(suffix, rpmname, goaltipaths, verbose)
       print(rpm.expand('%__goaltpkg\n'))
     end
@@ -235,10 +238,14 @@ local function singleinstall(kind, suffix, verbose)
     local fedora = require "fedora.common"
     local ismain = (suffix == "") or (suffix == "0")
     if ismain then
-      fedora.zalias({"goaltipaths"}, verbose)
+      fedora.zalias({"goaltipaths","gocid","goaltcid"},                verbose)
     end
-   for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths"  .. suffix .. "}",
-                                                     "%{?goaltcid"    .. suffix .. "}")) do
+    fedora.safeset("goaltcid" .. suffix, "%{?gocid"  .. suffix .. "}", verbose)
+    if ismain then
+      fedora.zalias({"goaltcid"},                                      verbose)
+    end
+    for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths" .. suffix .. "}",
+                                                      "%{goaltcid"    .. suffix .. "}")) do
       altenv(suffix, rpmname, goaltipaths, verbose)
       gocanonipath = rpm.expand("%{currentgocanonipath}")
       for _, goaltipath in ipairs(goaltipaths) do
@@ -280,10 +287,14 @@ local function singlefiles(kind, suffix, verbose)
     local fedora = require "fedora.common"
     local ismain = (suffix == "") or (suffix == "0")
     if ismain then
-      fedora.zalias({"goaltipaths"}, verbose)
+      fedora.zalias({"goaltipaths","gocid","goaltcid"},                verbose)
     end
-   for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths"  .. suffix .. "}",
-                                                     "%{?goaltcid"    .. suffix .. "}")) do
+    fedora.safeset("goaltcid" .. suffix, "%{?gocid"  .. suffix .. "}", verbose)
+    if ismain then
+      fedora.zalias({"goaltcid"},                                      verbose)
+    end
+    for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths" .. suffix .. "}",
+                                                      "%{goaltcid"    .. suffix .. "}")) do
       altenv(suffix, rpmname, goaltipaths, verbose)
       print(rpm.expand('%files -n %{currentgoaltname} -f "%{goworkdir}/%{currentgoaltfilelist}"\n'))
     end
