@@ -104,7 +104,7 @@ Source0: %{gosource}
 # Right now, “gogenbr” only manages version-less Go dependencies. If your
 # project requires a specific dependency version, or something which is not Go
 # code, you need to declare the corresponding BuildRequires manually as usual.
-%gogenbr
+%gogenbr -r
 
 %install
 # Perform installation steps for all known kinds of Go subpackages

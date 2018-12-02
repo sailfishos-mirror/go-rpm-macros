@@ -46,7 +46,7 @@ Source0: %{gosource}
 
 %prep
 %goprep
-%gogenbr
+%gogenbr -r
 
 %build
 # You need to identify manually the project parts that can be built, and how to

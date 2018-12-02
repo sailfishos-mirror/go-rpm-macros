@@ -63,7 +63,7 @@ Source0: %{gosource}
 
 %prep
 %goprep
-%gogenbr
+%gogenbr -r
 
 %build
 for cmd in cmd/* ; do

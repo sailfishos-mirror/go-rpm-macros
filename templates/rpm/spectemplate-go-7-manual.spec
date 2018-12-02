@@ -63,7 +63,7 @@ your Go code depends on this package, you should patch it to import directly
 
 %prep
 %goprep
-%gogenbr
+%gogenbr -r
 
 %install
 # goinstall is our Go source installation workhorse. It accepts a huge and
