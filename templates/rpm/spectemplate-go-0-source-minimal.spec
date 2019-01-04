@@ -89,7 +89,7 @@ Source0: %{gosource}
 # Remember to send fixes and problem reports upstream.
 # When you package an import path, that participates in a dependency loop, you
 # need bootstraping to manage the initial builds:
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Bootstrapping
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/#bootstrapping
 # For Go code, that means your bootstrap section should:
 #  – remove unit tests that import other parts of the loop
 #  – remove code that imports other parts of the loop
