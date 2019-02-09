@@ -24,7 +24,7 @@ Summary:        %{currentgodevelsummary}
 BuildRequires:  go-rpm-macros
 %{?currentgodevelheader}
 %description -n %{currentgodevelname}
-%(%cleandescription << EOF_DESCR
+%(%reformatdescriptiontext << EOF_DESCR
 %{?currentgodeveldescription}
 EOF_DESCR)
 }
@@ -35,7 +35,7 @@ Summary:        %{currentgoaltsummary}
 BuildRequires:  go-rpm-macros
 %{?currentgoaltheader}
 %description -n %{currentgoaltname}
-%(%cleandescription << EOF_DESCR
+%(%reformatdescriptiontext << EOF_DESCR
 %{?currentgoaltdescription}
 EOF_DESCR)
 }
@@ -44,8 +44,8 @@ EOF_DESCR)
 (
 %define __godevelinstall_ipath %{-i*}
 cd "%{gobuilddir}/src/%{__godevelinstall_ipath}"
-%define listfiles_inc %{?currentgosupfiles}
-%define listfiles_ex  %{?currentgosupfilesex}
+%define listfiles_include %{?currentgosupfiles}
+%define listfiles_exclude  %{?currentgosupfilesex}
 IFS= gosupfiles=$(%listfiles
 )
 go-rpm-integration install -i "%{__godevelinstall_ipath}"            \\
@@ -76,8 +76,8 @@ echo               "%{gopath}/src/%{currentgoaltipath}" >>  "%{goworkdir}/%{curr
 
 %__godevelinstalldoc() %{expand:
 (
-%define listfiles_inc %{?currentgodocs}
-%define listfiles_ex  %{?currentgodocsex}
+%define listfiles_include %{?currentgodocs}
+%define listfiles_exclude  %{?currentgodocsex}
 IFS= godocs=$(%listfiles
 )
 if [[ -n "${godocs}" ]] ; then
@@ -87,8 +87,8 @@ if [[ -n "${godocs}" ]] ; then
 fi
 )
 (
-%define listfiles_inc %{?currentgolicenses}
-%define listfiles_ex  %{?currentgolicensesex}
+%define listfiles_include %{?currentgolicenses}
+%define listfiles_exclude %{?currentgolicensesex}
 IFS= golicenses=$(%listfiles
 )
 if [[ -n "${golicenses}" ]] ; then
