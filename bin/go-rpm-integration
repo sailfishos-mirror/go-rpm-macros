@@ -433,14 +433,16 @@ GOPATH="${prefix}${gopath}" \
 case $action in
   install)        popmetadata
                   fixuserflags
-                  otherfiles=( $* )
                   filelist="${filelistroot}/${filelist}"
                   ${vinstall} -m 0755   -d "${prefix}${gopath}/src"
                   echo "Installing: ${goipath}"
                   pushd "${sourcedir}/src/${goipath}" >/dev/null
                     savemetadata            .goipath
                     touch -r "${sourcedir}" .goipath
-                    for file in $(listfiles "${goipath}") .goipath ${otherfiles[@]} ; do
+                    (
+                      listfiles "${goipath}"
+                      realpath -e -s --relative-base=. "$@" .goipath
+                    ) | sort -u | while IFS= read -r -d $'\n' file ; do
                       installfile "${goipath}" "${file}"
                     done
                     rm .goipath
