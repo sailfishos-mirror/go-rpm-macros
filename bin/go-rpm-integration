@@ -441,7 +441,7 @@ case $action in
                     touch -r "${sourcedir}" .goipath
                     (
                       listfiles "${goipath}"
-                      realpath -e -s --relative-base=. "$@" .goipath
+                      realpath -e -s --relative-base=. "$@" go.mod .goipath
                     ) | sort -u | while IFS= read -r -d $'\n' file ; do
                       installfile "${goipath}" "${file}"
                     done
