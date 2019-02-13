@@ -442,7 +442,7 @@ case $action in
                     (
                       listfiles "${goipath}"
                       realpath -e -s --relative-base=. "$@" go.mod .goipath
-                    ) | sort -u | while IFS= read -r -d $'\n' file ; do
+                    ) | sort -u | while IFS= read -r file ; do
                       installfile "${goipath}" "${file}"
                     done
                     rm .goipath
