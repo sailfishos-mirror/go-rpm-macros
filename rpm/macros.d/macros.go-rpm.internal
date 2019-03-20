@@ -92,8 +92,8 @@ fi
 IFS= golicenses=$(%listfiles
 )
 if [[ -n "${golicenses}" ]] ; then
-  while IFS= read -r ; do
-    echo "%"license \\"${f}\\" >> "%{goworkdir}/%{currentgodevelfilelist}"
+  while IFS= read -r f; do
+    echo "%"license \\""${f}"\\" >> "%{goworkdir}/%{currentgodevelfilelist}"
   done <<< "${golicenses}"
 fi
 )
