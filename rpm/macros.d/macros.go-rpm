@@ -149,8 +149,6 @@ fi
 cd                              "%{mybuilddir}/src/%{mygoipath}"
 }
 
-# Computes BuildRequires for a given import path. Optional argument:
-# -i <go import path> use the specified import path value
 # Perform usual Go source preparation steps. Optional arguments:
 # -z <number>         read the zth block of definitions, for example
 #                     %{goipath<number>}, %{commit<number>}…
@@ -196,7 +194,6 @@ else
 end
 }
 
-# https://github.com/rpm-software-management/rpm/issues/104
 # Computes BuildRequires for a given import path. Arguments:
 # -z <number>         read the zth block of definitions, for example
 #                     %{goipath<number>}, %{commit<number>}…
@@ -205,35 +202,35 @@ end
 #                     -z calls
 # -i <go import path> use the specified import path value instead of the one
 #                     found in %{goipath<number>}
-# -i <go import path> use the specified import path value
-# -r                  resolve BuildRequires, but do not install them
-%gogenbr(z:ai:r) %{lua:
-local        fedora =  require "fedora.common"
-local   installdeps = (rpm.expand("%{-r}") == "")
-local    processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
-local       goipath = rpm.expand("%{?-i*}")
--- https://github.com/gofed/symbols-extractor/issues/159
-local function process(suffix, goipath)
-  local goipath = (goipath ~= "") and goipath or rpm.expand("%{goipath" .. suffix .. "}")
-  print("golist --imported --package-path " .. goipath .. " --skip-self\\n")
-  print("golist --imported --package-path " .. goipath .. " --skip-self --tests\\n")
+%go_generate_buildrequires(z:ai:) %{lua:
+local      fedora =  require "fedora.common"
+local  myenvflags =  rpm.expand('%{?-i}')
+local  golistargs =  rpm.expand('%{?-i*}%{!-i:"%%{currentgoipath}"} ')
+local  processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
+-- https://pagure.io/golist/issue/3
+local function process(suffix)
+  local zsuffix = ""
+  if (suffix ~= "") and (suffix ~= nil) then
+    zsuffix = "-z " .. suffix .. " "
+  end
+  print(rpm.expand('%goenv ' .. zsuffix                .. myenvflags .. '\\n'             ..
+                   '%{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}" }' ..
+                   "golist --imported --package-path " .. golistargs .. "--skip-self\\n" ..
+                   '%{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}" }' ..
+                   "golist --imported --package-path " .. golistargs .. "--skip-self --tests\\n"))
 end
 -- Main loop
-if installdeps then
-  print('mock-install ')
-else
-  print('GOBUILDREQUIRES=')
-end
--- https://github.com/gofed/symbols-extractor/issues/155
-print('$((sort -u | xargs -I{} echo "golang({})") <<< "$(\\n')
+-- https://pagure.io/golist/issue/13
+print('(sort -u | xargs -I{} echo "golang({})") <<< "$(\\n')
 if processall then
+  -- https://pagure.io/golist/issue/4
   for _, s in pairs(fedora.getsuffixes("goipath")) do
-    process(s, "")
+    process(s)
   end
 else
-   process(rpm.expand("%{?-z*}"), rpm.expand(goipath))
+  process(rpm.expand("%{?-z*}"))
 end
-print(')")\\n')
+print(')"\\n')
 }
 
 # Try to install Go package files in sensible locations, with strict directory

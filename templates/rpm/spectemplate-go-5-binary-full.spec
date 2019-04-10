@@ -63,7 +63,9 @@ Source0: %{gosource}
 
 %prep
 %goprep
-%gogenbr -r
+
+%generate_buildrequires
+%go_generate_buildrequires
 
 %build
 for cmd in cmd/* ; do

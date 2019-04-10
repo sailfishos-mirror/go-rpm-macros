@@ -97,14 +97,14 @@ Source0: %{gosource}
 # subdirectories in a separate -devel subpackage. See also the “go-6-multi”
 # template.
 #
-# https://github.com/rpm-software-management/rpm/issues/104
-# “gogenbr” computes the build dependencies of the packaged Go code and
-# will install them in the build root once infra has improved. Assuming you
-# fixed source problems after “goprep”, it should just work.
-# Right now, “gogenbr” only manages version-less Go dependencies. If your
-# project requires a specific dependency version, or something which is not Go
-# code, you need to declare the corresponding BuildRequires manually as usual.
-%gogenbr -r
+
+# Anything outputed in this rpm section will be installed in the build
+# environment by mock
+%generate_buildrequires
+# “go_generate_buildrequires” computes the build dependencies of the packaged
+# Go code. Right now, it only knows how to compute version-less dependencies.
+# If that is not good enough for you you need to filter and rework its output.
+%go_generate_buildrequires
 
 %install
 # Perform installation steps for all known kinds of Go subpackages
