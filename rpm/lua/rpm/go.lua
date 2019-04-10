@@ -136,7 +136,7 @@ local function develenv(suffix, verbose)
   fedora.safeset("godevelfilelist"    .. suffix, rpmname .. "-%{gofilelist}",                                 verbose)
   fedora.safeset("godevelsummary"     .. suffix, "%{summary}",                                                verbose)
   fedora.safeset("godeveldescription" .. suffix, "%{?common_description}",                                    verbose)
-  local postdescr = "\n\nThis package contains the source code needed for building packages that reference" ..
+  local postdescr = "\n\nThis package contains the source code needed for building packages that reference " ..
                     "the following Go import paths:"
   postdescr       = postdescr .. string.gsub(goipaths, "([^%s]+)", "\n – %1")
   fedora.explicitset("currentgodeveldescription", "%{expand:%{godeveldescription" .. suffix .. "}" ..
@@ -170,9 +170,9 @@ local function altenv(suffix, rpmname, goaltipaths, verbose)
     posthead      = "\nObsoletes: " .. go.rpmname(goaltipath, "") .. "-devel < %{version}-%{release}"
   end
   postdescr       = postdescr ..
-		    "\n\nAliasing Go import paths via symbolic links or http redirects is fragile." ..
-            "If your Go code depends on this package, you should patch it to import "   ..
-            "directly %{currentgocanonipath}."
+                    "\n\nAliasing Go import paths via symbolic links or http redirects is fragile. " ..
+                        "If your Go code depends on this package, you should patch it to import "   ..
+                        "directly %{currentgocanonipath}."
   fedora.explicitset("currentgoaltdescription", "%{expand:%{?goaltdescription" .. suffix .. "}" ..
                                                    postdescr .. "}",                                          verbose)
   fedora.explicitset("currentgoaltheader",      "%{expand:%{?goaltheader" .. suffix .. "}"      ..

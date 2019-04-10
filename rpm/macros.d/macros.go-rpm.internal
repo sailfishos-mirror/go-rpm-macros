@@ -22,6 +22,7 @@
 %package     -n %{currentgodevelname}
 Summary:        %{currentgodevelsummary}
 BuildRequires:  go-rpm-macros
+BuildArch:      noarch
 %{?currentgodevelheader}
 %description -n %{currentgodevelname}
 %(%reformatdescriptiontext << EOF_DESCR
