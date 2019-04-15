@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/bash -e
 # Copyright © 2018 Nicolas Mailhot <nim@fedoraproject.org>,
 #                    Jan Chaloupka   <jchaloup@redhat.com>
 #
@@ -341,14 +341,14 @@ for proot in "$(realpath -sm ${PWD})" \
              "${prefix}${gopath}/src/${goipath}"; do
   [[ ${file}/ == ${proot}/* ]] && file=".${file#${proot}}"
 done
-file="$(realpath -sm ${file})"
+file=$(realpath -sm "${file}")
 local workdir="$(realpath -sm .)"
 if [[ ${file}/ == ${workdir}/* ]] ; then
   local dest="${prefix}${gopath}/src/${goipath}${file#${workdir}}"
 else
   local dest="${prefix}${file}"
 fi
-local destdir="$(dirname ${dest})"
+local destdir=$(dirname "${dest}")
 if [[ ! -d "${destdir}" ]] ; then
   installfile "${goipath}" "${destdir#${prefix}}"
 fi
