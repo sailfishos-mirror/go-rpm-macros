@@ -133,7 +133,7 @@ done
 provides() {
 local goipath="${1}"
 fullprovides golang-symlink "${goipath}"
-GOPATH="${prefix}${gopath}" \
+GOPATH="${prefix}${gopath}" GO111MODULE=off \
   golist --provided --package-path "${goipath}" $(expandflags) |\
     while read -r -d $'\n' prov ; do
       fullprovides golang "${prov}"

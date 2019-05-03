@@ -182,8 +182,10 @@ local function process(suffix)
   end
   print(rpm.expand('%goenv ' .. zsuffix                .. myenvflags .. '\\n'             ..
                    '%{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}" }' ..
+                   'GO111MODULE=off ' ..
                    "golist --imported --package-path " .. golistargs .. "--skip-self\\n" ..
                    '%{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}" }' ..
+                   'GO111MODULE=off ' ..
                    "golist --imported --package-path " .. golistargs .. "--skip-self --tests\\n"))
 end
 -- Main loop

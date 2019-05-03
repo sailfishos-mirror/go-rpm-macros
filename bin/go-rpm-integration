@@ -384,19 +384,20 @@ echo "${fllprefix:+${fllprefix} }\"${dest#${prefix}}\"" >> "${filelist}"
 
 listfiles() {
 local goipath="${1}"
-GOPATH="${sourcedir}" \
+GOPATH="${sourcedir}" GO111MODULE=off \
   golist --to-install --package-path ${goipath} $(expandflags)
 }
 
 checks() {
 local goipath="${1}"
-GOPATH="${workroot}${GOPATH+:${GOPATH}}" \
+GOPATH="${workroot}${GOPATH+:${GOPATH}}" GO111MODULE=off \
   golist --provided --tests --package-path ${goipath} $(expandflags) |\
     while read -r -d $'\n' dir ; do
       pushd "${workroot}/src/${dir}" >/dev/null
         echo "${dir}"
-        GOPATH="${workroot}${GOPATH:+:${GOPATH}}:${gopath}" \
-          PATH="${workbin:+${workbin}:}${PATH}" \
+             GOPATH="${workroot}${GOPATH:+:${GOPATH}}:${gopath}" \
+               PATH="${workbin:+${workbin}:}${PATH}" \
+        GO111MODULE=off \
           go test ${GO_TEST_FLAGS} -ldflags "${LDFLAGS:+${LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'"
       popd >/dev/null
     done
@@ -415,7 +416,7 @@ done
 provides() {
 local goipath="${1}"
 fullprovides golang-ipath "${goipath}"
-GOPATH="${prefix}${gopath}" \
+GOPATH="${prefix}${gopath}" GO111MODULE=off \
   golist --provided --package-path "${goipath}" $(expandflags) |\
     while read -r -d $'\n' prov ; do
       fullprovides golang "${prov}"
@@ -424,7 +425,7 @@ GOPATH="${prefix}${gopath}" \
 
 requires() {
 local goipath="${1}"
-GOPATH="${prefix}${gopath}" \
+GOPATH="${prefix}${gopath}" GO111MODULE=off \
   golist --imported --package-path "${goipath}" $(expandflags) --skip-self |\
     while read -r -d $'\n' req ; do
       echo "golang($req)"
@@ -459,11 +460,12 @@ case $action in
                     workroot="${sourcedir}"
                     workbin="${bindir}"
                   fi
-                  echo "Testing in: ${workroot}/src"
-                  echo "      PATH: ${workbin:+${workbin}:}${PATH}"
-                  echo "    GOPATH: ${workroot}${GOPATH:+:${GOPATH}}:${gopath}"
-                  echo "   command: go test ${GO_TEST_FLAGS} -ldflags \"${LDFLAGS:+${LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'\""
-                  echo "   testing: ${goipath}"
+                  echo "Testing    in: ${workroot}/src"
+                  echo "         PATH: ${workbin:+${workbin}:}${PATH}"
+                  echo "       GOPATH: ${workroot}${GOPATH:+:${GOPATH}}:${gopath}"
+                  echo "  GO111MODULE: off"
+                  echo "      command: go test ${GO_TEST_FLAGS} -ldflags \"${LDFLAGS:+${LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'\""
+                  echo "      testing: ${goipath}"
                   checks "${goipath}" ;;
   provides)       while read lockfile ; do
                     dir=$(dirname "${lockfile}")
