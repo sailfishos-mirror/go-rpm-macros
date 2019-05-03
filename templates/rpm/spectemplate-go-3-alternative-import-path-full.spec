@@ -1,5 +1,7 @@
 # Complete Go alternative import path packaging template.
 #
+# SPDX-License-Identifier: MIT
+#
 # This template complements “go-2-alternative import-path-minimal”, with less
 # usual spec declarations.
 #

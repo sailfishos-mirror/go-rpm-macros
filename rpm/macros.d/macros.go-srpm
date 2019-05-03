@@ -1,4 +1,4 @@
-# Copyright © 2015-2018 Jakub Cajka <jcajka@redhat.com>,
+# Copyright © 2015-2019 Jakub Cajka <jcajka@redhat.com>,
 #                       Jan Chaloupka <jchaloup@redhat.com>,
 #                       Nicolas Mailhot <nim@fedoraproject.org>
 #
@@ -21,6 +21,8 @@
 #
 # This file provides only macros and must not use any other package except
 # redhat-rpm-macros.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Define arches for PA and SA
 %golang_arches   @@GOLANG_ARCHES@@

@@ -1,5 +1,7 @@
 # Complete Go source code packaging template.
 #
+# SPDX-License-Identifier: MIT
+#
 # This template complements “go-0-source-minimal”, with less usual spec
 # declarations.
 #

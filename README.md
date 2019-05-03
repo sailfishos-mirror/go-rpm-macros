@@ -18,4 +18,4 @@ It uses [golist](https://pagure.io/golist) to analyse Go codebases.
 
 ## Licensing
 
-*go-rpm-macros* is licensed under the GPL version 3 or later; read the *LICENSE* file.
+*go-rpm-macros* is licensed under the GPL version 3 or later. The `spec` templates are licensed under the MIT license.

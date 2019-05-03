@@ -1,4 +1,4 @@
-# Copyright © 2015-2018 Jan Chaloupka <jchaloup@redhat.com>,
+# Copyright © 2015-2019 Jan Chaloupka <jchaloup@redhat.com>,
 #                       Nicolas Mailhot <nim@fedoraproject.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@
 #
 # The macros necessary at %setup and srpm stage are in the sister file
 # macros.go-srpm
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Default filtering policy
 # Complete or replace the following variables in your spec file if this policy

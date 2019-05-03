@@ -2,6 +2,8 @@
 # mode provides the most packager control. However, the result is also more
 # difficult to get right and to maintain.
 #
+# SPDX-License-Identifier: MIT
+#
 # Using this packaging mode is not recommended unless you really need it. If
 # you prepare your sources correctly in prep you should not need it.
 #
@@ -119,7 +121,7 @@ your Go code depends on this package, you should patch it to import directly
 #
 # Old name aliasing
 install -m 0755 -vd %{buildroot}%{gopath}/src/%(dirname %{oldgoipath})
-ln -s %{gopath}/src/%{goipath} %{buildroot}%{gopath}/src/%{oldgoipath}
+ln -rs %{buildroot}%{gopath}/src/%{goipath} %{buildroot}%{gopath}/src/%{oldgoipath}
 #
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/

@@ -17,6 +17,8 @@
 #
 # This file contains macros for building projects in golang for packages
 # with golang compiler or gcc-go compiler based on an architecture.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # Define commands for building
 # BUILD_ID can be generated for golang build no matter of debuginfo

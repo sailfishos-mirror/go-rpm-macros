@@ -4,6 +4,8 @@
 #
 # Legacy deprecated bits graveyard, for compatibility only
 # Do not use, they *will* be removed
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 %gobuildroot %{expand:
 %{warn:%%gobuildroot is obsolete, use %%goprep in %%prep instead!}

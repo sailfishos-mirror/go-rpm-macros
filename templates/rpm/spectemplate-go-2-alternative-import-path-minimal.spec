@@ -1,5 +1,7 @@
 # Minimal Go alternative import path packaging template.
 #
+# SPDX-License-Identifier: MIT
+#
 # Sometimes Go projects keep importing deprecated import path names, or use
 # forks with different names. Ideally, all codebases should be fixed to use the
 # current canonical import path, but that is not always possible.

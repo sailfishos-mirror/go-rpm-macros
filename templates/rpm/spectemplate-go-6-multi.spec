@@ -1,6 +1,8 @@
 # This template documents advanced Go packaging with multiples of everything.
 # Don’t try it before you understand how simpler Go packaging is done.
 #
+# SPDX-License-Identifier: MIT
+#
 # All the “go-*-” spec templates complement one another without documentation
 # overlaps. Try to read them all.
 #

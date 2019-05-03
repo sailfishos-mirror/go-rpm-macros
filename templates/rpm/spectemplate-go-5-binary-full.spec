@@ -1,5 +1,7 @@
 # Complete Go binary packaging template.
 #
+# SPDX-License-Identifier: MIT
+#
 # This template complements “go-5-binary-minimal”, with less usual spec
 # declarations.
 #

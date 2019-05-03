@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 %__gobundled_path       ^%{gopath}/src/.+/vendor/.+/.*$
 %__gobundled_magic      ^(.*, )?directory$
 %__gobundled_flags      magic_and_path
