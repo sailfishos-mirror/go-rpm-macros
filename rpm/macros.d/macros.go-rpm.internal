@@ -18,30 +18,6 @@
 # Internal utility macros
 # Direct use in spec file is not supported
 
-%__godevelpkg() %{expand:
-%package     -n %{currentgodevelname}
-Summary:        %{currentgodevelsummary}
-BuildRequires:  go-rpm-macros
-BuildArch:      noarch
-%{?currentgodevelheader}
-%description -n %{currentgodevelname}
-%(%reformatdescriptiontext << EOF_DESCR
-%{?currentgodeveldescription}
-EOF_DESCR)
-}
-
-%__goaltpkg() %{expand:
-%package     -n %{currentgoaltname}
-Summary:        %{currentgoaltsummary}
-BuildRequires:  go-rpm-macros
-BuildArch:      noarch
-%{?currentgoaltheader}
-%description -n %{currentgoaltname}
-%(%reformatdescriptiontext << EOF_DESCR
-%{?currentgoaltdescription}
-EOF_DESCR)
-}
-
 %__godevelinstall(-i:v) %{expand:
 (
 %define __godevelinstall_ipath %{-i*}
