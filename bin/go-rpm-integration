@@ -403,33 +403,27 @@ GOPATH="${workroot}${GOPATH+:${GOPATH}}" GO111MODULE=off \
     done
 }
 
-fullprovides() {
-local fp="${1}(${2})"
-echo "${fp}${metadata[version]:+ = ${metadata[version]}}"
-for m in "${!metadata[@]}" ; do
-  if [[ "${m}" != "version" ]] ; then
-    echo "${fp}(${m}=${metadata[${m}]})${metadata[version]:+ = ${metadata[version]}}"
-  fi
+provides() {
+local goipath="${1}"
+(
+  echo "golang-ipath(${goipath})"
+  GOPATH="${prefix}${gopath}" GO111MODULE=off \
+    golist --provided --package-path "${goipath}" $(expandflags) \
+           --skip-self --template 'golang({{.}})\n'
+) | while IFS= read -r prov ; do
+  echo "${prov}${metadata[version]:+ = ${metadata[version]}}"
+  for m in "${!metadata[@]}" ; do
+    if [[ "${m}" != "version" ]] ; then
+      echo "${prov}(${m}=${metadata[${m}]})${metadata[version]:+ = ${metadata[version]}}"
+    fi
+  done
 done
 }
 
-provides() {
-local goipath="${1}"
-fullprovides golang-ipath "${goipath}"
-GOPATH="${prefix}${gopath}" GO111MODULE=off \
-  golist --provided --package-path "${goipath}" $(expandflags) |\
-    while read -r -d $'\n' prov ; do
-      fullprovides golang "${prov}"
-    done
-}
-
 requires() {
-local goipath="${1}"
 GOPATH="${prefix}${gopath}" GO111MODULE=off \
-  golist --imported --package-path "${goipath}" $(expandflags) --skip-self |\
-    while read -r -d $'\n' req ; do
-      echo "golang($req)"
-    done
+  golist --imported  --package-path "${1}" $(expandflags) \
+         --skip-self --template 'golang({{.}})\n'
 }
 
 # Action-specific preparation

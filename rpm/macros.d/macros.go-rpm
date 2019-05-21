@@ -170,36 +170,30 @@ end
 # -i <go import path> use the specified import path value instead of the one
 #                     found in %{goipath<number>}
 %go_generate_buildrequires(z:ai:) %{lua:
-local      fedora =  require "fedora.common"
-local  myenvflags =  rpm.expand('%{?-i}')
-local  golistargs =  rpm.expand('%{?-i*}%{!-i:"%%{currentgoipath}"} ')
-local  processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
--- https://pagure.io/golist/issue/3
-local function process(suffix)
-  local zsuffix = ""
-  if (suffix ~= "") and (suffix ~= nil) then
-    zsuffix = "-z " .. suffix .. " "
-  end
-  print(rpm.expand('%goenv ' .. zsuffix                .. myenvflags .. '\\n'             ..
-                   '%{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}" }' ..
-                   'GO111MODULE=off ' ..
-                   "golist --imported --package-path " .. golistargs .. "--skip-self\\n" ..
-                   '%{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}" }' ..
-                   'GO111MODULE=off ' ..
-                   "golist --imported --package-path " .. golistargs .. "--skip-self --tests\\n"))
-end
--- Main loop
--- https://pagure.io/golist/issue/13
-print('(sort -u | xargs -I{} echo "golang({})") <<< "$(\\n')
+local        fedora =  require "fedora.common"
+local    processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
+local forcedgoipath =  rpm.expand("%{?-i}")
+local    golistargs = ""
 if processall then
-  -- https://pagure.io/golist/issue/4
   for _, s in pairs(fedora.getsuffixes("goipath")) do
-    process(s)
+    golistargs = golistargs .. " --package-path %{goipath" .. s .. "}"
   end
+  golistargs   = string.gsub(golistargs, "^ ", "")
+elseif forcedgoipath ~= "" then
+  golistargs   = "--package-path " .. forcedgoipath
 else
-  process(rpm.expand("%{?-z*}"))
+  golistargs   = "--package-path %{goipath" .. rpm.expand("%{?-z*}") .. "}"
 end
-print(')"\\n')
+local golistcmd = rpm.expand('GOPATH="%{?gobuilddir:%{gobuilddir}:}${GOPATH:+${GOPATH}:}%{?gopath}" ' ..
+                             'GO111MODULE=off ' ..
+                             "golist --imported " .. golistargs ..
+                                   " --template 'golang({{.}})\\\\n'" ..
+                                   " --skip-self")
+-- https://pagure.io/golist/issue/3
+print('(\\n' ..
+      '  ' .. golistcmd .. '\\n' ..
+      '  ' .. golistcmd .. ' --tests\\n' ..
+      ') | sort -u\\n')
 }
 
 # Try to install Go package files in sensible locations, with strict directory
