@@ -184,16 +184,11 @@ elseif forcedgoipath ~= "" then
 else
   golistargs   = "--package-path %{goipath" .. rpm.expand("%{?-z*}") .. "}"
 end
-local golistcmd = rpm.expand('GOPATH="%{?gobuilddir:%{gobuilddir}:}${GOPATH:+${GOPATH}:}%{?gopath}" ' ..
-                             'GO111MODULE=off ' ..
-                             "golist --imported " .. golistargs ..
-                                   " --template 'golang({{.}})\\\\n'" ..
-                                   " --skip-self")
--- https://pagure.io/golist/issue/3
-print('(\\n' ..
-      '  ' .. golistcmd .. '\\n' ..
-      '  ' .. golistcmd .. ' --tests\\n' ..
-      ') | sort -u\\n')
+print(rpm.expand('GOPATH="%{?gobuilddir:%{gobuilddir}:}${GOPATH:+${GOPATH}:}%{?gopath}" ' ..
+                 'GO111MODULE=off ' ..
+                 "golist --imported " .. golistargs ..
+                       " --template 'golang({{.}})\\\\n'" ..
+                       " --with-tests --skip-self\\n"))
 }
 
 # Try to install Go package files in sensible locations, with strict directory
