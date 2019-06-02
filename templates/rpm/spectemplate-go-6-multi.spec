@@ -126,13 +126,13 @@ Name:    %{goname}
 Version: 
 Release: 1%{?dist}
 Summary: 
-URL:	 %{gourl}
+URL:     %{gourl}
 # One for each of the previous goipath blocks
 Source0: %{gosource0}
 Source1: %{gosource1}
 # …
 %description
-%{common_description}
+%filterdescr -v common_description
 
 # “gopkg” will generate all the subpackages package declarations corresponding
 # to the elements declared above.

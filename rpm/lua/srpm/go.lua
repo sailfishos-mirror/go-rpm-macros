@@ -234,11 +234,20 @@ end
 
 -- Create a single %package section for a known kind of Go subpackage
 local function singlepkg(kind, suffix, verbose)
+  local fedora = require "fedora.common"
   if     (kind == "devel")  then
     develenv(suffix, verbose)
-    print(rpm.expand('%__godevelpkg\n'))
+    print(
+      rpm.expand(
+        "%package     -n %{currentgodevelname}\n" ..
+        "Summary:        %{currentgodevelsummary}\n" ..
+        "BuildRequires:  go-rpm-macros\n" ..
+        "BuildArch:      noarch\n" ..
+        "%{?currentgodevelheader}\n" ..
+        "%description -n %{currentgodevelname}\n") ..
+      fedora.filterdescr("%{?currentgodeveldescription}") ..
+      "\n")
   elseif (kind == "alt") then
-    local fedora = require "fedora.common"
     local ismain = (suffix == "") or (suffix == "0")
     if ismain then
       fedora.zalias({"goaltipaths","gocid","goaltcid"},                verbose)
@@ -250,7 +259,16 @@ local function singlepkg(kind, suffix, verbose)
     for rpmname, goaltipaths in pairs(indexedgoipaths("%{goaltipaths" .. suffix .. "}",
                                                       "%{goaltcid"    .. suffix .. "}")) do
       altenv(suffix, rpmname, goaltipaths, verbose)
-      print(rpm.expand('%__goaltpkg\n'))
+      print(
+        rpm.expand(
+          "%package     -n %{currentgoaltname}\n" ..
+          "Summary:        %{currentgoaltsummary}\n" ..
+          "BuildRequires:  go-rpm-macros\n" ..
+          "BuildArch:      noarch\n" ..
+          "%{?currentgoaltheader}\n" ..
+          "%description -n %{currentgoaltname}\n") ..
+        fedora.filterdescr("%{?currentgoaltdescription}") ..
+        "\n")
     end
   else
     rpm.expand("%{error:Unknown kind of Go subpackage: " .. kind .. "}")

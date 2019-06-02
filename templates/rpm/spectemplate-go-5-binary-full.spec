@@ -56,10 +56,10 @@ Name:    %{goname}
 Version: 
 Release: 1%{?dist}
 Summary: 
-URL:	 %{gourl}
+URL:     %{gourl}
 Source0: %{gosource}
 %description
-%{common_description}
+%filterdescr -v common_description
 
 %gopkg
 
