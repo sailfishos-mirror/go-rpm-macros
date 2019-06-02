@@ -43,7 +43,7 @@ go-rpm-integration install -i "%{__godevelinstall_ipath}"            \\
                            %{?currentgoipathsex}                     \\
                            %{?currentgoextensions}                   \\
                            %{?goinstallflags}                        \\
-                           %{-v} "${gosupfilesA[@]}"
+                           %{-v} ${gosupfilesA[@]:+"${gosupfilesA[@]}"}
 )
 }
 
