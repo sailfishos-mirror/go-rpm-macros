@@ -32,7 +32,7 @@ Summary:
 URL:     %{gourl}
 Source0: %{gosource}
 %description
-%filterdescr -v common_description
+%wordwrap -v common_description
 
 %package -n %{goname}-devel
 Summary: %{summary}

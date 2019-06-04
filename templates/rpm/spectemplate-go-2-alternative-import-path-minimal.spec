@@ -43,7 +43,7 @@ Summary:
 URL:     %{gourl}
 Source0: %{gosource}
 %description
-%filterdescr -v common_description
+%wordwrap -v common_description
 
 # Generate package declarations for all known kinds of Go subpackages. You can
 # replace if with separate “goaltpkg” and “godevelpkg” calls.

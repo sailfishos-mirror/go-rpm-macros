@@ -245,7 +245,7 @@ local function singlepkg(kind, suffix, verbose)
         "BuildArch:      noarch\n" ..
         "%{?currentgodevelheader}\n" ..
         "%description -n %{currentgodevelname}\n") ..
-      fedora.filterdescr("%{?currentgodeveldescription}") ..
+      fedora.wordwrap("%{?currentgodeveldescription}") ..
       "\n")
   elseif (kind == "alt") then
     local ismain = (suffix == "") or (suffix == "0")
@@ -267,7 +267,7 @@ local function singlepkg(kind, suffix, verbose)
           "BuildArch:      noarch\n" ..
           "%{?currentgoaltheader}\n" ..
           "%description -n %{currentgoaltname}\n") ..
-        fedora.filterdescr("%{?currentgoaltdescription}") ..
+        fedora.wordwrap("%{?currentgoaltdescription}") ..
         "\n")
     end
   else
