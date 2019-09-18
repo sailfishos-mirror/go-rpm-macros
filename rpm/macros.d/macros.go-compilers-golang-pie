@@ -1,0 +1,2 @@
+
+%gocompilerflags -buildmode pie -compiler gc
