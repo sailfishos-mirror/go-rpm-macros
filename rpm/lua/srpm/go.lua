@@ -47,7 +47,7 @@ local function rpmname(goipath, compatid)
     goname, i    = string.gsub(goname, "(%d)%.(%d)",           "%1:%2")
   until i == 0
   -- replace various separators rpm does not like with -
-  goname         = string.gsub(goname, "[%._/%-]+",            "-")
+  goname         = string.gsub(goname, "[%._/%-~]+",            "-")
   -- because of the Azure sdk
   goname         = string.gsub(goname, "%-for%-go%-",          "-")
   -- Tokenize along - separators and remove duplicates to avoid
