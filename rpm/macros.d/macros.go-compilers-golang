@@ -29,7 +29,7 @@
 #
 #    %make GOBUILDFLAGS="%gobuildflags"
 #
-%gobuildflags() %{expand:%{gocompilerflags} -tags=\\"rpm_crashtraceback \\" -ldflags \\"${LDFLAGS:-}%{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '%__global_ldflags %{?__golang_extldflags}'\\" -a -v -x}
+%gobuildflags() %{expand:%{gocompilerflags} -tags=\\"rpm_crashtraceback \\" -ldflags \\"${LDFLAGS:-} %{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '%__global_ldflags %{?__golang_extldflags}'\\" -a -v -x}
 
 # Turn off Go modules
 %gomodulesmode GO111MODULE=off
@@ -40,11 +40,11 @@
   # https://bugzilla.redhat.com/show_bug.cgi?id=995136#c12
   %global _dwz_low_mem_die_limit 0
   %{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}"} %{?gomodulesmode} \\
-  go build %{?gocompilerflags} -tags="rpm_crashtraceback ${BUILDTAGS:-}" -ldflags "${LDFLAGS:-}%{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '%__global_ldflags %{?__golang_extldflags}'" -a -v -x %{?**};
+  go build %{?gocompilerflags} -tags="rpm_crashtraceback ${BUILDTAGS:-}" -ldflags "${LDFLAGS:-} %{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '%__global_ldflags %{?__golang_extldflags}'" -a -v -x %{?**};
 }
 ${workroot}${GOPATH:+:${GOPATH}}
 
 # Define commands for testing
 %gotestflags      %{gocompilerflags}
 %gotestextldflags %__global_ldflags %{?__golang_extldflags}
-%gotest() %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-}%{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
+%gotest() %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
