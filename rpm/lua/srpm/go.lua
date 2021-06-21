@@ -28,7 +28,7 @@ local function rpmname(goipath, compatid)
   -- remove eventual protocol prefix
   goname         = string.gsub(goname, "^http(s?)://",         "")
   -- remove eventual .git suffix
-  goname         = string.gsub(goname, "%.git/*",              "")
+  goname         = string.gsub(goname, "%.git/+",              "")
   -- remove eventual git. prefix
   goname         = string.gsub(goname, "^git%.",               "")
   -- remove FQDN root (.com, .org, etc)
