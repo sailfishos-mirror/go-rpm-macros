@@ -391,7 +391,7 @@ GOPATH="${sourcedir}" GO111MODULE=off \
 checks() {
 local goipath="${1}"
 GOPATH="${workroot}${GOPATH+:${GOPATH}}" GO111MODULE=off \
-  golist --provided --tests --package-path ${goipath} $(expandflags) |\
+  golist --provided --with-tests --package-path ${goipath} $(expandflags) |\
     while read -r -d $'\n' dir ; do
       pushd "${workroot}/src/${dir}" >/dev/null
         echo "${dir}"
