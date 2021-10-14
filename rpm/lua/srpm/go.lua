@@ -67,8 +67,8 @@ local function rpmname(goipath, compatid)
   result = string.gsub(result, ":", ".")
   -- some projects have a name that end up in a number, and *also* add release
   -- numbers on top of it, keep a - prefix before version strings
-  result = string.gsub(result, "%-v([%.%d])$", "-%1")
-  result = string.gsub(result, "%-v([%.%d]%-)", "-%1")
+  result = string.gsub(result, "%-v([%.%d]+)$", "-%1")
+  result = string.gsub(result, "%-v([%.%d]+%-)", "-%1")
   return(result)
 end
 
