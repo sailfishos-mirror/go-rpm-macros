@@ -350,7 +350,8 @@ local function process(suffix)
         zsuffix = "-z " .. suffix .. " "
   end
   print(rpm.expand('%goenv ' .. zsuffix        .. myenvflags   .. '\\n'               ..
-                   '%{?currentgoldflags:LDFLAGS="${LDFLAGS} %{?currentgoldflags}" }'   ..
+                   '%{?currentgoldflags:LDFLAGS="%{golang_filter_ldflags} '           ..
+                   '%{?currentgoldflags}" }'                                          ..
                    '%{?gotestflags:GO_TEST_FLAGS="%{gotestflags}" }'                  ..
                    '%{?gotestextldflags:GO_TEST_EXT_LD_FLAGS="%{gotestextldflags}" }' ..
                    'go-rpm-integration check ' .. mycheckflags .. '\\n'))
