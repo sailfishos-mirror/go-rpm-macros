@@ -37,6 +37,10 @@
 # Define commands for building
 # BUILD_ID can be generated for golang build no matter of debuginfo
 %gobuild(o:) %{expand:
+  # https://pagure.io/go-rpm-macros/pull-request/38
+  # Most of the default LDFLAGS for Fedora are not supported so we don't want
+  # LDFLAGS to be automatically initialized with the Fedora flags.
+  %undefine _auto_set_build_flags
   # https://bugzilla.redhat.com/show_bug.cgi?id=995136#c12
   %global _dwz_low_mem_die_limit 0
   %{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}"} %{?gomodulesmode} \\
@@ -47,4 +51,7 @@ ${workroot}${GOPATH:+:${GOPATH}}
 # Define commands for testing
 %gotestflags      %{gocompilerflags}
 %gotestextldflags %__global_ldflags %{?__golang_extldflags}
-%gotest() %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
+%gotest() %{
+  %undefine _auto_set_build_flags
+  %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
+}
