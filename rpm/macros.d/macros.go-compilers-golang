@@ -51,7 +51,7 @@ ${workroot}${GOPATH:+:${GOPATH}}
 # Define commands for testing
 %gotestflags      %{gocompilerflags}
 %gotestextldflags %__global_ldflags %{?__golang_extldflags}
-%gotest() %{
+%gotest() %{expand:
   %undefine _auto_set_build_flags
   %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
 }
