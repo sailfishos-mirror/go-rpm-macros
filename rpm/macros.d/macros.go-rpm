@@ -330,6 +330,7 @@ go.install("alt", suffix, processall, verbose)
 #                     recursive (subdirectories are excluded)
 # -r <regexp>         exclude files matching <regexp>,
 %gocheck(z:ai:b:s:vd:t:rV:T:C:B:p:g:w) %{lua:
+rpm.undefine('_auto_set_build_flags')
 local       fedora =  require "fedora.common"
 local   processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local   myenvflags =  rpm.expand('%{?-i} %{?-v} %{?-V} %{?-T} %{?-C} %{?-B}')
