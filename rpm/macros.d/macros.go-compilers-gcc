@@ -26,9 +26,9 @@
 # Define commands for building
 %gobuild(o:) %{expand:
 %{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}"} \\
-go build -compiler gccgo -gccgoflags     "$RPM_OPT_FLAGS ${LDFLAGS:-%{?currentgoldflags} %__global_ldflags} %{?__golang_extldflags}" -a -v -x %{?**};
+go build -compiler gccgo -gccgoflags     "$RPM_OPT_FLAGS ${LDFLAGS:-%{?currentgoldflags} %{build_ldflags}} %{?__golang_extldflags}" -a -v -x %{?**};
 }
 
 # Define commands for testing
-%gotestflags -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-%{?currentgoldflags} %__global_ldflags} %{?__golang_extldflags}"
+%gotestflags -compiler gccgo -gccgoflags "$RPM_OPT_FLAGS ${LDFLAGS:-%{?currentgoldflags} %{build_ldflags}} %{?__golang_extldflags}"
 %gotest() go test %{gotestflags} %{?**};
