@@ -98,13 +98,11 @@ local function meta(suffix, verbose, informative, silent)
   if (cleangoipath ~= spec["goipath"]) then
     fedora.explicitset(goipath .. suffix, cleangoipath)
   end
-  if (spec["forgeurl"] ~= "") then
-    fedora.safeset("gourl"    .. suffix, "%{forgeurl"        .. suffix .. "}",verbose)
-  else
-    fedora.safeset("gourl"    .. suffix, "https://%{goipath" .. suffix .. "}",verbose)
-    fedora.safeset("forgeurl" .. suffix, "%{gourl"           .. suffix .. "}",verbose)
+  if (spec["forgeurl"] == "") then
+    fedora.safeset("forgeurl"    .. suffix, "https://%{goipath" .. suffix .. "}",verbose)
   end
   forge.meta(suffix, verbose, informative, silent)
+  fedora.safeset("gourl"    .. suffix, "%{forgeurl"        .. suffix .. "}",verbose)
   if (rpm.expand("%{?forgesource" .. suffix .. "}") ~= "") then
     fedora.safeset("gosource" .. suffix, "%{forgesource" .. suffix .. "}",verbose)
   else
