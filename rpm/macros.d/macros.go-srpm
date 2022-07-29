@@ -25,6 +25,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # Define arches for PA and SA
+
+# There is no %%go_arches_future that contains %%gccgo_arches, as
+# %%gccgo_arches don't match any currently supported Fedora architectures
+%golang_arches_future @@GOLANG_ARCHES_FUTURE@@
 %golang_arches   @@GOLANG_ARCHES@@
 %gccgo_arches    @@GCCGO_ARCHES@@
 %go_arches       %{golang_arches} %{gccgo_arches}
@@ -104,9 +108,16 @@ print(go.rpmname("%1", "%{-c*}"))
 #   -v  Be verbose and print every spec variable the macro sets.
 #   -i  Print some info about the state of spec variables the macro may use or
 #       set at the end of the processing.
-%gometa(az:svi) %{lua:
+#   -f  Use ExclusiveArch: %%{golang_arches_future}, which excludes the package
+#       from %ix86. All new go packages should use this option.
+%gometa(az:svif) %{lua:
+if rpm.expand("%{-f}") == "" then
+  exclusive_arches = "%{golang_arches}"
+else
+  exclusive_arches = "%{golang_arches_future}"
+end
 print(           "BuildRequires: go-rpm-macros\\n")
-print(rpm.expand("ExclusiveArch: %{go_arches}\\n"))
+print(rpm.expand("ExclusiveArch: " .. exclusive_arches .. "\\n"))
 local      fedora =  require "fedora.common"
 local          go =  require "fedora.srpm.go"
 local     verbose =  rpm.expand("%{-v}") ~= ""
