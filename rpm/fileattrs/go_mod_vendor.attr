@@ -2,4 +2,4 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 %__go_mod_vendor_path ^%{_defaultlicensedir}(/[^/]+)+/modules.txt$
-%__go_mod_vendor_provides %{_rpmconfigdir}/redhat/vendor2provides.py
+%__go_mod_vendor_provides %{_rpmconfigdir}/go_mod_vendor.prov
