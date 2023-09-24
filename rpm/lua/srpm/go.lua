@@ -69,6 +69,21 @@ local function rpmname(goipath, compatid)
   -- numbers on top of it, keep a - prefix before version strings
   result = string.gsub(result, "%-v([%.%d]+)$", "-%1")
   result = string.gsub(result, "%-v([%.%d]+%-)", "-%1")
+  if rpm.isdefined('go_use_new_versioning') then
+    -- according to the guidelines, if the base package name does not end with
+    -- a digit, the version MUST be directly appended to the package name with
+    -- no intervening separator.
+    -- If the base package name ends with a digit, a single underscore (_) MUST
+    -- be appended to the name, and the version MUST be appended to that, in
+    -- order to avoid confusion over where the name ends and the version begins.
+    result = string.gsub(result, "([^-]*)(%-?)([%.%d]+)$", function(prior, hyphen, version)
+      if string.find(prior, "%d$") then
+        return prior .. "_" .. version
+      else
+        return prior .. version
+      end
+    end)
+  end
   return(result)
 end
 

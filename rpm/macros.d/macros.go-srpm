@@ -46,8 +46,14 @@
 #                    from the primary package tracking the project recommended
 #                    version. For example: a (different) major version, a
 #                    specific shortened commit, etc
-%gorpmname(c:) %{lua:
+#   -L               Enable new naming scheme for versioned compat packages
+#                    that respect Fedora Packaging Guidelines.
+#                    All new go packages should use this option. 
+%gorpmname(Lc:) %{lua:
 local go = require "fedora.srpm.go"
+if rpm.expand("%{-L}") ~= "" then
+  rpm.define("go_use_new_versioning 1")
+end
 print(go.rpmname("%1", "%{-c*}"))
 }
 
@@ -110,7 +116,10 @@ print(go.rpmname("%1", "%{-c*}"))
 #       set at the end of the processing.
 #   -f  Use ExclusiveArch: %%{golang_arches_future}, which excludes the package
 #       from %ix86. All new go packages should use this option.
-%gometa(az:svif) %{lua:
+#   -L  Enable new naming scheme for versioned compat packages that respects
+#       Fedora Packaging Guidelines.
+#       All new go packages should use this option. 
+%gometa(az:svifL) %{lua:
 if rpm.expand("%{-f}") == "" then
   exclusive_arches = "%{golang_arches}"
 else
@@ -124,6 +133,9 @@ local     verbose =  rpm.expand("%{-v}") ~= ""
 local informative =  rpm.expand("%{-i}") ~= ""
 local      silent =  rpm.expand("%{-s}") ~= ""
 local  processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
+if rpm.expand("%{-L}") ~= "" then
+  rpm.define("go_use_new_versioning 1")
+end
 if processall then
   for _,s in pairs(fedora.getsuffixes("goipath")) do
     go.meta(s,verbose,informative,silent)
