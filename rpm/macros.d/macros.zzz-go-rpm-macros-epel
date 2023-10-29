@@ -1,24 +1,6 @@
 # Copyright © 2015-2019 Jan Chaloupka <jchaloup@redhat.com>,
 #                       Nicolas Mailhot <nim@fedoraproject.org>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-# This file contains macros needed at %build %install and %check
-# stage by Golang packages.
-#
-# The macros necessary at %setup and srpm stage are in the sister file
-# macros.go-srpm
+# Copyright © 2022      Maxwell G <gotmax@e.email>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -365,3 +347,13 @@ else
   process(rpm.expand("%{-z*}"))
 end
 }
+
+# EPEL 9-only macros
+
+# This is the directory where RHEL 9 bundles golist.
+%_golist_dir      %{_libexecdir}/go-rpm-macros
+
+# Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2098400
+# The modified golist in RHEL has a different CLI interface, so we only add
+# the extra arguments when that is used.
+%goinstallflags %{godefaultflags} -e .proto -e .s -e .md
