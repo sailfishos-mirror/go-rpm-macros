@@ -50,7 +50,7 @@
 #                    that respect Fedora Packaging Guidelines.
 #                    All new go packages should use this option. 
 %gorpmname(Lc:) %{lua:
-local go = require "fedora.srpm.go"
+local go = require "fedora.srpm.go_epel"
 if rpm.expand("%{-L}") ~= "" then
   rpm.define("go_use_new_versioning 1")
 end
@@ -128,7 +128,7 @@ end
 print(           "BuildRequires: go-rpm-macros\\n")
 print(rpm.expand("ExclusiveArch: " .. exclusive_arches .. "\\n"))
 local      fedora =  require "fedora.common"
-local          go =  require "fedora.srpm.go"
+local          go =  require "fedora.srpm.go_epel"
 local     verbose =  rpm.expand("%{-v}") ~= ""
 local informative =  rpm.expand("%{-i}") ~= ""
 local      silent =  rpm.expand("%{-s}") ~= ""
@@ -159,7 +159,7 @@ end
 #                     -z calls
 # -v                  be verbose
 %godevelpkg(z:av) %{lua:
-local         go =  require "fedora.srpm.go"
+local         go =  require "fedora.srpm.go_epel"
 local     suffix =  rpm.expand("%{-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")
@@ -173,7 +173,7 @@ go.pkg("devel", suffix, processall, verbose)
 #                     -z calls
 # -v                  be verbose
 %goaltpkg(z:av) %{lua:
-local         go =  require "fedora.srpm.go"
+local         go =  require "fedora.srpm.go_epel"
 local     suffix =  rpm.expand("%{-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")
@@ -194,7 +194,7 @@ go.pkg("alt", suffix, processall, verbose)
 #                     -z calls
 # -v                  be verbose
 %godevelfiles(z:av) %{lua:
-local         go =  require "fedora.srpm.go"
+local         go =  require "fedora.srpm.go_epel"
 local     suffix =  rpm.expand("%{-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")
@@ -208,7 +208,7 @@ go.files("devel", suffix, processall, verbose)
 #                     -z calls
 # -v                  be verbose
 %goaltfiles(z:av) %{lua:
-local         go =  require "fedora.srpm.go"
+local         go =  require "fedora.srpm.go_epel"
 local     suffix =  rpm.expand("%{-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")

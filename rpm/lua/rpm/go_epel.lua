@@ -25,7 +25,7 @@
 -- See the documentation in the macros.go-rpm file for argument description
 local function env(suffix, goipath, verbose, usermetadata)
   local  fedora = require "fedora.common"
-  local      go = require "fedora.srpm.go"
+  local      go = require "fedora.srpm.go_epel"
   local  suffix = suffix
   local goipath = goipath
   local  ismain = (suffix == "") or (suffix == "0")
@@ -74,7 +74,7 @@ end
 
 -- Create a single set of %install tasks for a known kind of Go subpackage
 local function singleinstall(kind, suffix, verbose)
-  local go = require "fedora.srpm.go"
+  local go = require "fedora.srpm.go_epel"
   if     (kind == "devel")  then
     go.develenv(suffix, verbose)
     for goipath in string.gmatch(rpm.expand("%{currentgoipaths}"), "[^%s]+") do
@@ -115,7 +115,7 @@ end
 -- Create one or all %install tasks for a known kind of go subpackage
 local function install(kind, suffix, processall, verbose)
   local fedora = require "fedora.common"
-  local go     = require "fedora.srpm.go"
+  local go     = require "fedora.srpm.go_epel"
   if (kind == "devel") then
     go.develenvinit()
   end

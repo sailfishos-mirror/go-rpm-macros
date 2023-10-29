@@ -54,7 +54,7 @@
 # -C <commit>         default: %{commit<number>}
 # -B <branch>         default: %{branch<number>}
 %goenv(z:i:vV:T:C:B:) %{lua:
-local       go =  require "fedora.rpm.go"
+local       go =  require "fedora.rpm.go_epel"
 local   suffix =  rpm.expand("%{?-z*}")
 local  goipath =  rpm.expand("%{?-i*}")
 local  verbose = (rpm.expand("%{-v}") ~= "")
@@ -267,7 +267,7 @@ end
 #                     -z calls
 # -v                  be verbose
 %godevelinstall(z:av) %{lua:
-local         go =  require "fedora.rpm.go"
+local         go =  require "fedora.rpm.go_epel"
 local     suffix =  rpm.expand("%{-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")
@@ -281,7 +281,7 @@ go.install("devel", suffix, processall, verbose)
 #                     -z calls
 # -v                  be verbose
 %goaltinstall(z:av) %{lua:
-local         go =  require "fedora.rpm.go"
+local         go =  require "fedora.rpm.go_epel"
 local     suffix =  rpm.expand("%{-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")

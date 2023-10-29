@@ -141,7 +141,7 @@ local listflags = {goipaths = "-i", goipathsex = "-t", goextensions = "-e"}
 -- Convert a space-separated list of import paths to a table indexed by their
 -- rpmname version, to handle upstreams that play naming games
 local function indexedgoipaths(goipaths, gocid)
-  local       go = require "fedora.srpm.go"
+  local       go = require "fedora.srpm.go_epel"
   local giptable = {}
   for goipath in string.gmatch(rpm.expand(goipaths), "[^%s,]+") do
     local key = go.rpmname(goipath, gocid)
@@ -169,7 +169,7 @@ end
 -- Set rpm variables related to the processing of a golang-*-devel subpackage
 local function develenv(suffix, verbose)
   local fedora = require "fedora.common"
-  local     go = require "fedora.srpm.go"
+  local     go = require "fedora.srpm.go_epel"
   local ismain = (suffix == "") or (suffix == "0")
   if ismain then
     fedora.zalias(  {"goipath", "gocid", "gofilelist",
@@ -214,7 +214,7 @@ end
 -- Set rpm variables related to the processing of a compat-golang-*-devel subpackage
 local function altenv(suffix, rpmname, goaltipaths, verbose)
   local fedora = require "fedora.common"
-  local     go = require "fedora.srpm.go"
+  local     go = require "fedora.srpm.go_epel"
   local ismain = (suffix == "") or (suffix == "0")
   if ismain then
     fedora.zalias(  {"goipath", "gocanonipath",
