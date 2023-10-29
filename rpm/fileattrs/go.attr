@@ -1,6 +1,0 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-
-%__go_path              ^%{gopath}/src/.+/.goipath$
-%__go_flags             path
-%__go_provides          go-rpm-integration provides --prefix "%{buildroot}" --go-path "%{gopath}" %{?goprovflags}
-%__go_requires          go-rpm-integration requires --prefix "%{buildroot}" --go-path "%{gopath}" %{?goreqflags}

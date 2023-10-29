@@ -1,7 +1,0 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-
-%__gosymlink_path       ^%{gopath}/src/.*$
-%__gosymlink_magic      ^(.*, )?(broken )?symbolic link to .*$
-%__gosymlink_flags      magic_and_path
-%__gosymlink_provides   %{_rpmconfigdir}/gosymlink.deps provides --prefix "%{buildroot}" --go-path "%{gopath}"
-%__gosymlink_requires   %{_rpmconfigdir}/gosymlink.deps requires --prefix "%{buildroot}" --go-path "%{gopath}"
