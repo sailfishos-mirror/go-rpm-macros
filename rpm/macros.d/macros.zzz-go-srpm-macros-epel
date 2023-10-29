@@ -126,6 +126,7 @@ else
   exclusive_arches = "%{golang_arches_future}"
 end
 print(           "BuildRequires: go-rpm-macros\\n")
+print(           "BuildRequires: go-rpm-macros-epel\\n")
 print(rpm.expand("ExclusiveArch: " .. exclusive_arches .. "\\n"))
 local      fedora =  require "fedora.common"
 local          go =  require "fedora.srpm.go_epel"
