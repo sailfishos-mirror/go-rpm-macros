@@ -356,12 +356,6 @@ if [[ ! -d "${destdir}" ]] ; then
 fi
 if [[ (! -e $file) || (-d "${file}" && ! -L "${file}") ]] ; then
   ${vinstall} -m 0755 -d "${dest}"
-  if [[ -d "${file}" && ! -L "${file}" ]] ; then
-    find "${file}" -maxdepth 1 -iname '*.md' -type f -print0 | \
-      while read -r -d $'\0' docfile ; do
-        installfile "${goipath}" "${docfile}"
-      done
-  fi
   local fllprefix="%dir"
 else
   if [[ -L "${file}" ]] ; then
