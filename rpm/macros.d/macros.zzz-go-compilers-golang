@@ -1,0 +1,57 @@
+# Copyright © 2015-2018 Jakub Cajka <jcajka@redhat.com>,
+#                       Jan Chaloupka <jchaloup@redhat.com>,
+#                       Nicolas Mailhot <nim@fedoraproject.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# This file contains macros for building projects in golang for packages
+# with golang compiler or gcc-go compiler based on an architecture.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# This *must* be all on one line, as it will be used in shell
+# assignments. eg
+#
+#    GOBUILDFLAGS="%gobuildflags" %configure
+#
+# Or
+#
+#    %make GOBUILDFLAGS="%gobuildflags"
+#
+%gobuildflags() %{expand:%{gocompilerflags} -tags="rpm_crashtraceback ${BUILDTAGS:-}" -ldflags "${LDFLAGS:-} %{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -compressdwarf=false -linkmode=external -extldflags '%{build_ldflags} %{?__golang_extldflags}'" -a -v -x}
+
+# Turn off Go modules
+%gomodulesmode GO111MODULE=off
+
+# Define commands for building
+# BUILD_ID can be generated for golang build no matter of debuginfo
+%gobuild(o:) %{expand:
+  # https://pagure.io/go-rpm-macros/pull-request/38
+  # Most of the default LDFLAGS for Fedora are not supported so we don't want
+  # LDFLAGS to be automatically initialized with the Fedora flags.
+  %undefine _auto_set_build_flags
+  # https://bugzilla.redhat.com/show_bug.cgi?id=995136#c12
+  %global _dwz_low_mem_die_limit 0
+  %{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}"} %{?gomodulesmode} \\
+  go build %{gobuildflags} %{?**};
+}
+${workroot}${GOPATH:+:${GOPATH}}
+
+# Define commands for testing
+%gotestflags      %{gocompilerflags}
+%gotestextldflags %{build_ldflags} %{?__golang_extldflags}
+%gotest() %{expand:
+  %undefine _auto_set_build_flags
+  %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
+}
