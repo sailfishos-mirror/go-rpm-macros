@@ -26,7 +26,7 @@ def process(path: str):
     # parse vendored dependencies into (import path, version) pairs
     vendored = list()
     # Handle => style replace directives
-    replace_regex = re.compile("^.+( v[0-9-\.]+)? => ")
+    replace_regex = re.compile(r"^.+( v[0-9-\.]+)? => ")
     for dep in dependencies:
         ipath, version = replace_regex.sub("", dep[2:]).split(" ")[:2]
 
