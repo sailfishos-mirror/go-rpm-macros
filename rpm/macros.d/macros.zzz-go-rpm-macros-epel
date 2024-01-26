@@ -31,6 +31,58 @@ end
 go.env(suffix, goipath, verbose, mvalues)
 }
 
+# Perform usual Go source preparation steps. Optional arguments:
+# -z <number>         read the zth block of definitions, for example
+#                     %{goipath<number>}, %{commit<number>}…
+#                     derived from the import path value if not specified
+# -a                  process all sources in one go, instead of using separate
+#                     -z calls
+# -i <go import path> use the specified import path value instead of the one
+#                     found in %{goipath<number>}
+# -b <builddir>       use <builddir>  as build directory
+#                     binaries will be produced in <builddir>/bin
+#                     expanded Go sources will be symlinked in <builddir>/src
+# -s <sourcedir>      symlink expanded Go sources from <sourcedir>
+#                     default: %{_builddir}/%{?extractdir<number>}
+# -k                  keep the vendor directory, do not delete it
+# -e                  use extracted archives, do not perform %setup-like
+#                     operations
+# -A                  run %autosetup -N instead of %setup.
+#                     run %autopatch -p1 separately to apply patches
+# -S<scm>             pass an SCM name to %autosetup; implies -A
+# -v                  be verbose
+%goprep(z:ai:b:s:kervS:A) %{lua:
+local        fedora =  require "fedora.common"
+local       extract = (rpm.expand("%{-e}") == "")
+-- Use autosetup if either -A or -S is passed
+local     autosetup = (rpm.expand("%{-A}%{-S}") ~= "")
+local   installdeps = (rpm.expand("%{-r}") == "")
+local    processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
+local    setupflags =  rpm.expand("%{!-v:-q}")
+local autosetupflags = rpm.expand("%{-v} %{-S}")
+local  gomkdirflags =  rpm.expand("%{?-i} %{?-b} %{?-s} %{-k} %{-v}")
+local buildrequires = {}
+local function process(suffix)
+  local zsuffix = ""
+  if (suffix ~= "") and (suffix ~= nil) then
+        zsuffix = "-z " .. suffix .. " "
+  end
+  if extract then
+    setup = autosetup and ("%autosetup -N " .. autosetupflags) or ("%setup  " .. setupflags)
+    print(rpm.expand(setup .." %{?forgesetupargs" .. suffix .. "}\\n"))
+  end
+  print(  rpm.expand("%gomkdir " .. zsuffix .. gomkdirflags .. "\\n"))
+end
+-- Main loop
+if processall then
+  for _,s in pairs(fedora.getsuffixes("goipath")) do
+    process(s)
+  end
+else
+   process(rpm.expand("%{?-z*}"))
+end
+}
+
 
 # Perform the %install tasks of a golang-*-devel subpackage. Arguments:
 # -z <number>         read the zth block of definitions, for example
