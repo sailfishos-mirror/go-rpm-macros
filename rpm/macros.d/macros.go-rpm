@@ -132,13 +132,19 @@ cd                              "%{mybuilddir}/src/%{mygoipath}"
 # -k                  keep the vendor directory, do not delete it
 # -e                  use extracted archives, do not perform %setup-like
 #                     operations
+# -A                  run %autosetup -N instead of %setup.
+#                     run %autopatch -p1 separately to apply patches
+# -S<scm>             pass an SCM name to %autosetup; implies -A
 # -v                  be verbose
-%goprep(z:ai:b:s:kerv) %{lua:
+%goprep(z:ai:b:s:kervS:A) %{lua:
 local        fedora =  require "fedora.common"
 local       extract = (rpm.expand("%{-e}") == "")
+-- Use autosetup if either -A or -S is passed
+local     autosetup = (rpm.expand("%{-A}%{-S}") ~= "")
 local   installdeps = (rpm.expand("%{-r}") == "")
 local    processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    setupflags =  rpm.expand("%{!-v:-q}")
+local autosetupflags = rpm.expand("%{-v} %{-S}")
 local  gomkdirflags =  rpm.expand("%{?-i} %{?-b} %{?-s} %{-k} %{-v}")
 local buildrequires = {}
 local function process(suffix)
@@ -147,7 +153,8 @@ local function process(suffix)
         zsuffix = "-z " .. suffix .. " "
   end
   if extract then
-    print(rpm.expand("%setup " .. setupflags .. " %{?forgesetupargs" .. suffix .. "}\\n"))
+    setup = autosetup and ("%autosetup -N " .. autosetupflags) or ("%setup  " .. setupflags)
+    print(rpm.expand(setup .." %{?forgesetupargs" .. suffix .. "}\\n"))
   end
   print(  rpm.expand("%gomkdir " .. zsuffix .. gomkdirflags .. "\\n"))
 end
