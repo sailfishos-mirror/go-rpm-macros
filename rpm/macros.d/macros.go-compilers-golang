@@ -21,7 +21,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # All flags to pass "go build" other than -ldflags
-%gobuild_baseflags %{gocompilerflags} -tags="rpm_crashtraceback ${BUILDTAGS:-}" -a -v -x
+# BACKWARDS COMPATIBILITY:
+#     $BUILDTAGS is supported as a deprecated alias to $GO_BUILDTAGS to add additional
+#     arguments to `go build -tags "..."`.
+#     Please set $GO_BUILDTAGS instead of $BUILDTAGS.
+%gobuild_baseflags %{gocompilerflags} -tags="rpm_crashtraceback ${GO_BUILDTAGS-${BUILDTAGS-}}" -a -v -x
 # A shell-escaped version of %gobuild_baseflags.
 # Can be used to set an environment or make variable.
 # Example from the aerc package:
@@ -36,7 +40,11 @@ EOF\
 )"
 
 # Argument to pass to "go build"'s -ldflags option
-%gobuild_ldflags ${LDFLAGS:-} %{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -compressdwarf=false -linkmode=external -extldflags '%{build_ldflags} %{?__golang_extldflags}'
+# BACKWARDS COMPATIBILITY:
+#     $LDFLAGS is supported as a deprecated alias to $GO_LDFLAGS to add additional
+#     arguments to `go build -ldflags "..."`.
+#     Please set $GO_LDFLAGS instead of $LDFLAGS.
+%gobuild_ldflags ${GO_LDFLAGS-${LDFLAGS-}} %{?currentgoldflags} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -compressdwarf=false -linkmode=external -extldflags '%{build_ldflags} %{?__golang_extldflags}'
 # A shell-escaped version of %gobuild_ldflags.
 # Can be used to set an environment or make variable.
 # Example from the aerc package:
@@ -86,5 +94,5 @@ ${workroot}${GOPATH:+:${GOPATH}}
 %gotestextldflags %{build_ldflags} %{?__golang_extldflags}
 %gotest() %{expand:
   %undefine _auto_set_build_flags
-  %{?gomodulesmode} go test %{gotestflags} -ldflags "${LDFLAGS:-} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
+  %{?gomodulesmode} go test %{gotestflags} -ldflags "${GO_LDFLAGS-${LDFLAGS-}} %{?currentgoldflags} -extldflags '%{gotestextldflags}'" %{?**};
 }

@@ -392,7 +392,7 @@ GOPATH="${workroot}${GOPATH+:${GOPATH}}" GO111MODULE=off \
              GOPATH="${workroot}${GOPATH:+:${GOPATH}}:${gopath}" \
                PATH="${workbin:+${workbin}:}${PATH}" \
         GO111MODULE=off \
-          go test ${GO_TEST_FLAGS} -ldflags "${LDFLAGS:+${LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'"
+          go test ${GO_TEST_FLAGS} -ldflags "${GO_LDFLAGS:+${GO_LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'"
       popd >/dev/null
     done
 }
@@ -452,7 +452,7 @@ case $action in
                   echo "         PATH: ${workbin:+${workbin}:}${PATH}"
                   echo "       GOPATH: ${workroot}${GOPATH:+:${GOPATH}}:${gopath}"
                   echo "  GO111MODULE: off"
-                  echo "      command: go test ${GO_TEST_FLAGS} -ldflags \"${LDFLAGS:+${LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'\""
+                  echo "      command: go test ${GO_TEST_FLAGS} -ldflags \"${GO_LDFLAGS:+${GO_LDFLAGS} }-extldflags '${GO_TEST_EXT_LD_FLAGS}'\""
                   echo "      testing: ${goipath}"
                   checks "${goipath}" ;;
   provides)       while read lockfile ; do
