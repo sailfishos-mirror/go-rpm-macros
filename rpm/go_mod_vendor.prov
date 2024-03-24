@@ -12,8 +12,27 @@
 import re
 import sys
 
+# TODO(anyone): Rewrite this whole thing using regex instead of manual line parsing
+
+# Handle => style replace directives
+REPLACE_REGEX = re.compile(r"^.+( v[0-9-\.]+)? => (?!\./)")
+# Handle local replace directives
+LOCAL_REPLACE_REGEX = re.compile(r"=> \./.*")
+
 
 def process(path: str):
+    """
+    Process lines in a modules.txt file
+
+    Example lines:
+
+    ```
+    # bitbucket.org/bertimus9/systemstat v0.5.0
+    # github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1
+    # k8s.io/api v0.0.0 => ./staging/src/k8s.io/api
+    # golang.org/x/crypto v0.8.0 => github.com/ProtonMail/crypto v0.0.0-20200420072808-71bec3603bf3
+    ```
+    """
     with open(path, encoding="utf-8") as file:
         contents = file.read()
 
@@ -24,10 +43,13 @@ def process(path: str):
 
     # parse vendored dependencies into (import path, version) pairs
     vendored = list()
-    # Handle => style replace directives
-    replace_regex = re.compile(r"^.+( v[0-9-\.]+)? => ")
     for dep in dependencies:
-        ipath, version = replace_regex.sub("", dep[2:]).split(" ")[:2]
+        # Strip leading character
+        dep = dep[2:]
+        # Apply replacements
+        for reg in (REPLACE_REGEX, LOCAL_REPLACE_REGEX):
+            dep = reg.sub("", dep)
+        ipath, version = dep.split(" ")[:2]
 
         # check for git snapshots
         if len(version) > 27:
