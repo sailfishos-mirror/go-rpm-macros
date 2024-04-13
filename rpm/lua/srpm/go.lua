@@ -76,7 +76,7 @@ local function rpmname(goipath, compatid)
     -- If the base package name ends with a digit, a single underscore (_) MUST
     -- be appended to the name, and the version MUST be appended to that, in
     -- order to avoid confusion over where the name ends and the version begins.
-    result = string.gsub(result, "([^-]*)(%-?)([%.%d]+)$", function(prior, hyphen, version)
+    result = string.gsub(result, "([^-]*)(%-)([%.%d]+)$", function(prior, hyphen, version)
       if string.find(prior, "%d$") then
         return prior .. "_" .. version
       else
