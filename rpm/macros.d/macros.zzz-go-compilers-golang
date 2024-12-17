@@ -25,7 +25,7 @@
 #     $BUILDTAGS is supported as a deprecated alias to $GO_BUILDTAGS to add additional
 #     arguments to `go build -tags "..."`.
 #     Please set $GO_BUILDTAGS instead of $BUILDTAGS.
-%gobuild_baseflags %{gocompilerflags} -tags="rpm_crashtraceback ${GO_BUILDTAGS-${BUILDTAGS-}}" -a -v -x
+%gobuild_baseflags %{gocompilerflags} -tags="rpm_crashtraceback libtrust_openssl ${GO_BUILDTAGS-${BUILDTAGS-}}" -a -v -x
 # A shell-escaped version of %gobuild_baseflags.
 # Can be used to set an environment or make variable.
 # Example from the aerc package:
@@ -85,6 +85,7 @@ EOF\
   # https://bugzilla.redhat.com/show_bug.cgi?id=995136#c12
   %global _dwz_low_mem_die_limit 0
   %{?gobuilddir:GOPATH="%{gobuilddir}:${GOPATH:+${GOPATH}:}%{?gopath}"} %{?gomodulesmode} \\
+  GOPPC64=power9 GOAMD64=v2 CGO_CPPFLAGS="-D_FORTIFY_SOURCE=2 -fstack-protector-all" \\
   go build %{gobuildflags} %{?**};
 }
 ${workroot}${GOPATH:+:${GOPATH}}
