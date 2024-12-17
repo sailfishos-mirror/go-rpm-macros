@@ -27,6 +27,8 @@ if [ -n "${MACRO_LUA_DIR}" ]; then
     _default_lua_dir="$(rpm -E '%{lua: print(package.path)}')"
     _path="$(printf "'%s'" "${MACRO_LUA_DIR}/?.lua;${_default_lua_dir}")"
     args+=("-E" "%{lua: package.path = ${_path} }")
+    # Delete the first empty line that's created by the lua expansion.
+    "${args[@]}" "$@" | sed 1d
+else
+    "${args[@]}" "$@"
 fi
-
-exec "${args[@]}" "$@"
