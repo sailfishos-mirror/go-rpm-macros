@@ -91,7 +91,7 @@ end
 -- See the documentation in the macros.go-srpm file for argument description
 local function meta(suffix, verbose, informative, silent)
   local  fedora = require "fedora.common"
-  local   forge = require "fedora.srpm.forge"
+  local   forge = require "fedora.srpm.forge_epel"
   local zsuffix = ""
   if (suffix ~= "") then
         zsuffix = " -z " .. suffix
