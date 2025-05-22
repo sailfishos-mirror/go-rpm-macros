@@ -378,8 +378,3 @@ end
 
 # This is the directory where RHEL 9 bundles golist.
 %_golist_dir      %{_libexecdir}/go-rpm-macros
-
-# Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2098400
-# The modified golist in RHEL has a different CLI interface, so we only add
-# the extra arguments when that is used.
-%goinstallflags %{godefaultflags} -e .proto -e .s -e .md
