@@ -18,5 +18,5 @@ podman run --rm \
     -v ~/.cache/fedrq:/fedrq-cache/fedrq:z \
     -ti \
     quay.io/gotmax23/fedrq:ubi9 \
-wr -b "${branch}" -r @epel -s -F line:name,repoid:@ go-rpm-macros go-rpm-macros-epel \
+wr -X -b "${branch}" -r @epel -s -F line:name,repoid:@ go-rpm-macros go-rpm-macros-epel \
     | grep 'epel-source' | sponge | cut -d@ -f1
