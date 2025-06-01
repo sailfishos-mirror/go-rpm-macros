@@ -73,7 +73,7 @@ EOF\
 )"
 
 # Turn off Go modules
-%gomodulesmode GO111MODULE=off
+%gomodulesmode GO111MODULE="${GO111MODULE:-off}"
 
 # Define commands for building
 # BUILD_ID can be generated for golang build no matter of debuginfo
