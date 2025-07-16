@@ -1,3 +1,9 @@
+# Migrated to Gitlab
+
+https://gitlab.com/fedora/sigs/go/go-rpm-macros
+
+---
+
 # go-rpm-macros
 
 The *go-rpm-macros* project provides files needed to automate Go (Golang) rpm
